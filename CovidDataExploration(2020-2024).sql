@@ -33,7 +33,7 @@ order by 1,2
 
 -- 3)Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract covid in your country
-SELECT Location, Date, Total_Cases,     Total_Deaths,     (CAST(Total_Deaths AS FLOAT) / CAST(Total_Cases AS FLOAT)) * 100 AS DeathPercentage
+SELECT Location, Date, Total_Cases, Total_Deaths, (CAST(Total_Deaths AS FLOAT) / CAST(Total_Cases AS FLOAT)) * 100 AS DeathPercentage
 FROM    CovidDeaths
 WHERE  Location LIKE '%states%' AND Continent IS NOT NULL ORDER BY    1, 2;
 
@@ -82,7 +82,8 @@ order by TotalDeathCount desc
 
 -- 8) GLOBAL NUMBERS in percentage
 
-Select SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as DeathPercentage
+Select SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, 
+SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as DeathPercentage
 From CovidDeaths
 --Where location like '%states%'
 where continent is not null 
@@ -108,7 +109,7 @@ ORDER BY
     1, 2;
 
 
--- 100)Using CTE to perform Calculation on Partition By in previous query
+-- 10)Using CTE to perform Calculation on Partition By in previous query
 
 With PopvsVac (Continent, Location, Date, Population, New_Vaccinations, RollingPeopleVaccinated)
 as
@@ -127,7 +128,7 @@ Select *, (RollingPeopleVaccinated/Population)*100
 From PopvsVac
 
 
--- 11Using Temp Table to perform Calculation on Partition By in previous query
+-- 11)Using Temp Table to perform Calculation on Partition By in previous query
 
 -- Create the temporary table
 DROP Table if exists #PercentPopulationVaccinated
@@ -148,7 +149,8 @@ SELECT
     dea.date, 
     dea.population, 
     vac.new_vaccinations,
-    SUM(CONVERT(BIGINT, vac.new_vaccinations)) OVER (PARTITION BY dea.Location ORDER BY dea.location, dea.Date) as RollingPeopleVaccinated
+    SUM(CONVERT(BIGINT, vac.new_vaccinations)) OVER 
+	(PARTITION BY dea.Location ORDER BY dea.location, dea.Date) as RollingPeopleVaccinated
 FROM 
     CovidDeaths dea
 JOIN 

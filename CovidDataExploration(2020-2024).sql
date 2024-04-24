@@ -22,7 +22,7 @@ From CovidDeaths
 Where continent is not null 
 order by 3,4
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 2)Select Data that we are going to be starting with
 
 Select Location, date, total_cases, new_cases, total_deaths, population
@@ -30,14 +30,14 @@ From CovidDeaths
 Where continent is not null 
 order by 1,2
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 3)Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract covid in your country
 SELECT Location, Date, Total_Cases, Total_Deaths, (CAST(Total_Deaths AS FLOAT) / CAST(Total_Cases AS FLOAT)) * 100 AS DeathPercentage
 FROM    CovidDeaths
 WHERE  Location LIKE '%states%' AND Continent IS NOT NULL ORDER BY    1, 2;
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 4) Total Cases vs Population
 -- Shows what percentage of population infected with Covid
 
@@ -46,7 +46,7 @@ From CovidDeaths
 --Where location like '%states%'
 order by 1,2
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 5) Countries with Highest Infection Rate compared to Population
 
 Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
@@ -55,7 +55,7 @@ From CovidDeaths
 Group by Location, Population
 order by PercentPopulationInfected desc
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 6) Countries with Highest Death Count per Population
 
 Select Location, MAX(cast(Total_deaths as int)) as TotalDeathCount
@@ -65,7 +65,7 @@ Where continent is not null
 Group by Location
 order by TotalDeathCount desc
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 7)BREAKING THINGS DOWN BY CONTINENT
 
@@ -78,7 +78,7 @@ Where continent is not null
 Group by continent
 order by TotalDeathCount desc
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 8) GLOBAL NUMBERS in percentage
 
@@ -90,7 +90,7 @@ where continent is not null
 --Group By date
 order by 1,2
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 9)Total Population vs Vaccinations
 -- Shows Percentage of Population that has recieved at least one Covid Vaccine
@@ -108,7 +108,7 @@ WHERE
 ORDER BY 
     1, 2;
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 10)Using CTE to perform Calculation on Partition By in previous query
 
 With PopvsVac (Continent, Location, Date, Population, New_Vaccinations, RollingPeopleVaccinated)
@@ -127,7 +127,7 @@ where dea.continent is not null
 Select *, (RollingPeopleVaccinated/Population)*100
 From PopvsVac
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- 11)Using Temp Table to perform Calculation on Partition By in previous query
 
 -- Create the temporary table
@@ -171,7 +171,7 @@ FROM
     #PercentPopulationVaccinated;
 
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 12) Creating View to store data for later visualizations
 
@@ -185,4 +185,4 @@ Join CovidVaccinations vac
 	and dea.date = vac.date
 where dea.continent is not null 
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
